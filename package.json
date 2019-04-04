@@ -1,0 +1,30 @@
+{
+  "scripts": {
+    "start": "nodemon index.js",
+    "format": "prettier --write ./**/*.js ./*.js",
+    "publish-schema": "apollo service:push --endpoint=http://localhost:4000",
+    "check-schema": "apollo service:check --endpoint=http://localhost:4000"
+  },
+  "dependencies": {
+    "apollo-datasource": "^0.3.1",
+    "apollo-server": "^2.4.8",
+    "csv-parse": "^4.3.4",
+    "graphql": "^14.1.1",
+    "graphql-iso-date": "^3.6.1",
+    "lodash": "^4.17.11",
+    "module-alias": "^2.2.0",
+    "moment": "^2.24.0",
+    "mongoose": "^5.4.16"
+  },
+  "devDependencies": {
+    "apollo": "^2.6.0",
+    "babel-eslint": "^10.0.1",
+    "eslint": "^5.15.1",
+    "eslint-plugin-prettier": "^3.0.1",
+    "nodemon": "^1.18.10",
+    "prettier": "1.16.4"
+  },
+  "_moduleAliases": {
+    "spent": "."
+  }
+}
