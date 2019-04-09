@@ -5,7 +5,7 @@ const typeDefs = require("spent/config/apollo/schema");
 const resolvers = require("spent/config/apollo/resolvers");
 const { getUserFromToken } = require("spent/api/auth");
 
-const server = new ApolloServer({
+const server = ApolloServer({
   typeDefs,
   resolvers,
   dataSources: () => {},
@@ -15,7 +15,7 @@ const server = new ApolloServer({
 
     try {
       token = req.headers.authorization;
-      user = await getUserFromToken(token);
+      user = getUserFromToken(token);
     } catch (e) {
       // no token or no user
       console.warn(`Unable to authenticate using auth token: ${token}`);
@@ -23,6 +23,7 @@ const server = new ApolloServer({
 
     return {
       token,
+      // accessed by then or await
       user
     };
   }
