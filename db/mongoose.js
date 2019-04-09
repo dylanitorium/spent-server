@@ -1,8 +1,10 @@
 const mongoose = require("mongoose");
 const { schemaConfig } = require("spent/config/mongoose");
 
+const host = ["mongodb://", process.env.DB_LOCATION].join();
+
 mongoose.set("useFindAndModify", false);
-mongoose.connect("mongodb://localhost:27017/spent", { useNewUrlParser: true });
+mongoose.connect(host, { useNewUrlParser: true });
 mongoose.connection.on(
   "error",
   console.error.bind(console, "MongoDB Connection Error:")

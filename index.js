@@ -3,20 +3,27 @@ require("module-alias/register");
 const { ApolloServer } = require("apollo-server");
 const typeDefs = require("spent/config/apollo/schema");
 const resolvers = require("spent/config/apollo/resolvers");
+const { getUserFromToken } = require("spent/api/auth");
 
 const server = new ApolloServer({
   typeDefs,
   resolvers,
   dataSources: () => {},
-  context: ({ req }) => {
-    let authToken = null;
-    let currentUser = null;
+  context: async ({ req }) => {
+    let token = null;
+    let user = null;
 
-    // Do something here using the authToken to retrieve the currently logged in user
+    try {
+      token = req.headers.authorization;
+      user = await getUserFromToken(token);
+    } catch (e) {
+      // no token or no user
+      console.warn(`Unable to authenticate using auth token: ${token}`);
+    }
 
     return {
-      authToken,
-      currentUser
+      token,
+      user
     };
   }
 });
