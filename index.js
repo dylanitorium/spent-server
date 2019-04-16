@@ -1,29 +1,27 @@
 require("module-alias/register");
+require("dotenv").config();
 
 const { ApolloServer } = require("apollo-server");
 const typeDefs = require("spent/config/apollo/schema");
 const resolvers = require("spent/config/apollo/resolvers");
 const { getUserFromToken } = require("spent/api/auth");
+const Budget = require("spent/db/models/Budget");
 
-const server = ApolloServer({
+const server = new ApolloServer({
   typeDefs,
   resolvers,
-  dataSources: () => {},
-  context: async ({ req }) => {
+  dataSources: () => ({
+    budget: Budget
+  }),
+  context: ({ req }) => {
     let token = null;
     let user = null;
 
-    try {
-      token = req.headers.authorization;
-      user = getUserFromToken(token);
-    } catch (e) {
-      // no token or no user
-      console.warn(`Unable to authenticate using auth token: ${token}`);
-    }
+    token = req.headers.authorization;
+    user = getUserFromToken(token);
 
     return {
       token,
-      // accessed by then or await
       user
     };
   }

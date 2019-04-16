@@ -16,20 +16,20 @@ const getKey = (header, cb) => {
 const options = {
   audience: auth0Config.clientId,
   issuer: `https://${auth0Config.domain}/`,
-  algorithms: ["RS256"]
+  algorithms: auth0Config.algorithms
 };
 
-const getEmailFromToken = token =>
+const getUserFromToken = token =>
   new Promise((resolve, reject) => {
     jwt.verify(token, getKey, options, (err, decoded) => {
       if (err) {
         return reject(err);
       }
-      // should inspect the JWT here
+
       resolve(decoded.email);
     });
   });
 
 module.exports = {
-  getEmailFromToken
+  getUserFromToken
 };

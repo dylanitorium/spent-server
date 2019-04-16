@@ -1,5 +1,5 @@
 module.exports = {
-  clientId: "<YOUR_AUTH0_CLIENT_ID>",
-  domain: "<YOUR_AUTH0_DOMAIN>",
+  clientId: process.env.AUTH0_CLIENT_ID,
+  domain: process.env.AUTH0_DOMAIN,
   algorithms: ["RS256"]
 };

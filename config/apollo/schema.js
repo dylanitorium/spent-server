@@ -4,24 +4,28 @@ module.exports = gql`
   scalar Date
   scalar DateTime
 
-  type Query {
-    me: User!
+  enum BudgetFrequencyUnit {
+    SECONDS
+    MINUTES
+    HOURS
+    DAYS
+    WEEKS
+    MONTHS
+    YEARS
   }
 
-  type Mutation {
-    authenticateLocal(email: String, password: String): AuthenticationResult
-    authenticateGoogle: AuthenticationResult
-  }
-
-  type User {
+  type Budget {
     id: ID!
     name: String!
-    email: String!
+    yearlyAmount: Int!
+    frequencyValue: Int!
+    frequencyUnit: BudgetFrequencyUnit!
+    startDate: Date
+    createdAt: DateTime
+    updatedAt: DateTime
   }
 
-  type AuthenticationResult {
-    success: Boolean!
-    error: String
-    user: User
+  type Query {
+    budgets: [Budget]!
   }
 `;
