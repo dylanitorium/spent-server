@@ -20,12 +20,27 @@ module.exports = gql`
     yearlyAmount: Int!
     frequencyValue: Int!
     frequencyUnit: BudgetFrequencyUnit!
-    startDate: Date
+    startDate: DateTime
     createdAt: DateTime
     updatedAt: DateTime
   }
 
   type Query {
     budgets: [Budget]!
+  }
+
+  type Mutation {
+    createBudget(
+      name: String!
+      yearlyAmount: Int!
+      frequencyValue: Int!
+      frequencyUnit: BudgetFrequencyUnit!
+      startDate: DateTime!
+    ): CreateBudgetResponse
+  }
+
+  type CreateBudgetResponse {
+    success: Boolean!
+    budget: Budget
   }
 `;

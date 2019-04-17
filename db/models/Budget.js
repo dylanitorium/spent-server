@@ -1,6 +1,6 @@
 const { createSchema, model } = require("spent/db/mongoose");
 const moment = require("moment");
-// require("@db/models/BudgetCategory");
+require("spent/db/models/Plan");
 // const GroupingRule = require("@db/models/GroupingRule");
 
 const FREQUENCY_UNITS = {
@@ -83,12 +83,12 @@ const budgetSchema = createSchema(
     frequencyUnit: {
       type: String,
       enum: Object.values(FREQUENCY_UNITS)
-    }
-    // category: { type: String, ref: "BudgetCategory" }
+    },
+    plan: { type: String, ref: "Plan" }
     // rules: [GroupingRule.schema]
   },
   {
-    collection: "BudgetGroups"
+    collection: "Budgets"
   }
 );
 
@@ -100,4 +100,4 @@ budgetSchema.loadClass(Budget);
 //   foreignField: "group"
 // });
 
-module.exports = model("BudgetGroup", budgetSchema);
+module.exports = model("Budget", budgetSchema);

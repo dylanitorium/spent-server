@@ -5,13 +5,14 @@ const { ApolloServer } = require("apollo-server");
 const typeDefs = require("spent/config/apollo/schema");
 const resolvers = require("spent/config/apollo/resolvers");
 const { getUserFromToken } = require("spent/api/auth");
-const Budget = require("spent/db/models/Budget");
+const { Budget, Plan } = require("spent/db/models");
 
 const server = new ApolloServer({
   typeDefs,
   resolvers,
   dataSources: () => ({
-    budget: Budget
+    budget: Budget,
+    plan: Plan
   }),
   context: ({ req }) => {
     let token = null;
