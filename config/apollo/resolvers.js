@@ -4,7 +4,12 @@ const { GraphQLDate, GraphQLDateTime } = require("graphql-iso-date");
 const withAuth = resolver => async (obj, args, context, info) => {
   try {
     const user = await context.user;
-    return resolver(user, obj, args, context, info);
+    const plan = await context.dataSources.plan.findOneAndUpdate(
+      { owner: user },
+      { owner: user },
+      { upsert: true }
+    );
+    return resolver({ user, plan }, obj, args, context, info);
   } catch {
     throw new AuthenticationError("You must be logged in to do this");
   }
@@ -12,19 +17,13 @@ const withAuth = resolver => async (obj, args, context, info) => {
 
 module.exports = {
   Query: {
-    budgets: withAuth((user, obj, args, { dataSources }, info) => {
-      return dataSources.budget.find().where({ user });
+    budgets: withAuth(({ plan }, obj, args, { dataSources }, info) => {
+      return dataSources.budget.find().where({ plan: plan.id });
     })
   },
   Mutation: {
-    createBudget: withAuth(async (user, obj, args, { dataSources }) => {
+    createBudget: withAuth(async ({ plan }, obj, args, { dataSources }) => {
       try {
-        const plan = await dataSources.plan.findOneAndUpdate(
-          { owner: user },
-          { owner: user },
-          { upsert: true }
-        );
-
         const budget = await dataSources.budget.create({
           ...args,
           plan: plan.id
@@ -35,6 +34,7 @@ module.exports = {
           budget
         };
       } catch (error) {
+        console.error(error);
         return {
           success: false
         };
