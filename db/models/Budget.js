@@ -84,7 +84,8 @@ const budgetSchema = createSchema(
       type: String,
       enum: Object.values(FREQUENCY_UNITS)
     },
-    plan: { type: String, ref: "Plan" }
+    plan: { type: String, ref: "Plan" },
+    income: Boolean
     // rules: [GroupingRule.schema]
   },
   {

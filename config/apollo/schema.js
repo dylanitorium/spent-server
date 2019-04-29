@@ -21,6 +21,7 @@ module.exports = gql`
     frequencyValue: Int!
     frequencyUnit: BudgetFrequencyUnit!
     startDate: DateTime
+    income: Boolean
     createdAt: DateTime
     updatedAt: DateTime
   }
@@ -35,7 +36,8 @@ module.exports = gql`
       yearlyAmount: Int!
       frequencyValue: Int!
       frequencyUnit: BudgetFrequencyUnit!
-      startDate: DateTime!
+      startDate: Date!
+      income: Boolean
     ): CreateBudgetResponse
   }
 

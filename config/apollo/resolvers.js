@@ -10,7 +10,7 @@ const withAuth = resolver => async (obj, args, context, info) => {
       { upsert: true }
     );
     return resolver({ user, plan }, obj, args, context, info);
-  } catch {
+  } catch (error) {
     throw new AuthenticationError("You must be logged in to do this");
   }
 };
