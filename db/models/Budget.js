@@ -1,6 +1,7 @@
 const { createSchema, model } = require("spent/db/mongoose");
 const moment = require("moment");
 require("spent/db/models/Plan");
+require("spent/db/models/Category");
 // const GroupingRule = require("@db/models/GroupingRule");
 
 const FREQUENCY_UNITS = {
@@ -85,6 +86,7 @@ const budgetSchema = createSchema(
       enum: Object.values(FREQUENCY_UNITS)
     },
     plan: { type: String, ref: "Plan" },
+    category: { type: String, ref: "Category" },
     income: Boolean
     // rules: [GroupingRule.schema]
   },

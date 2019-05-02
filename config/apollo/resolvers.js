@@ -1,5 +1,7 @@
 const { AuthenticationError } = require("apollo-server");
 const { GraphQLDate, GraphQLDateTime } = require("graphql-iso-date");
+const moment = require("moment");
+const reportError = require("spent/utils/reportError");
 
 const withAuth = resolver => async (obj, args, context, info) => {
   try {
@@ -19,6 +21,22 @@ module.exports = {
   Query: {
     budgets: withAuth(({ plan }, obj, args, { dataSources }, info) => {
       return dataSources.budget.find().where({ plan: plan.id });
+    }),
+    categories: withAuth(async ({ plan }, obj, args, { dataSources }, info) => {
+      const categories = dataSources.category.find().where({ plan: plan.id });
+      await dataSources.categories.populate(categories, "budgets");
+      return categories.map(category => ({
+        id: category.id,
+        name: category.name,
+        budgets: category.budgets.map(budget => ({
+          id: budget.id,
+          name: budget.name
+        }))
+      }));
+    }),
+    plan: withAuth(async ({ plan }, obj, args, { dataSources }, info) => {
+      await dataSources.plan.populate(plan, "budgets");
+      return plan.reduce(moment());
     })
   },
   Mutation: {
@@ -34,7 +52,25 @@ module.exports = {
           budget
         };
       } catch (error) {
-        console.error(error);
+        reportError(error);
+        return {
+          success: false
+        };
+      }
+    }),
+    createCategory: withAuth(async ({ plan }, obj, args, { dataSources }) => {
+      try {
+        const category = await dataSources.category.create({
+          ...args,
+          plan: plan.id
+        });
+
+        return {
+          success: true,
+          category
+        };
+      } catch (error) {
+        reportError(error);
         return {
           success: false
         };

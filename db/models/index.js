@@ -1,4 +1,5 @@
 module.exports = {
   Budget: require("./Budget"),
-  Plan: require("./Plan")
+  Plan: require("./Plan"),
+  Category: require("./Category")
 };

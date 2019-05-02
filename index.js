@@ -5,7 +5,7 @@ const { ApolloServer } = require("apollo-server");
 const typeDefs = require("spent/config/apollo/schema");
 const resolvers = require("spent/config/apollo/resolvers");
 const { getUserFromToken } = require("spent/api/auth");
-const { Budget, Plan } = require("spent/db/models");
+const { Budget, Plan, Category } = require("spent/db/models");
 
 const server = new ApolloServer({
   typeDefs,

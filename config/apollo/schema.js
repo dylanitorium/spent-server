@@ -26,8 +26,28 @@ module.exports = gql`
     updatedAt: DateTime
   }
 
+  type Category {
+    id: ID!
+    name: String
+    budgets: [Category_Budget]
+  }
+
+  type Category_Budget {
+    id: ID!
+    name: String!
+  }
+
+  type Plan {
+    yearlyPlannedIncome: Int
+    yearlyPlannedExpenses: Int
+    expectedExpensesToDate: Int
+    expectedIncomeToDate: Int
+  }
+
   type Query {
     budgets: [Budget]!
+    categories: [Category]
+    plan: Plan!
   }
 
   type Mutation {
@@ -37,12 +57,19 @@ module.exports = gql`
       frequencyValue: Int!
       frequencyUnit: BudgetFrequencyUnit!
       startDate: Date!
-      income: Boolean
+      category: ID
+      income: Boolean!
     ): CreateBudgetResponse
+    createCategory(name: String!): CreateCategoryResponse
   }
 
   type CreateBudgetResponse {
     success: Boolean!
     budget: Budget
+  }
+
+  type CreateCategoryResponse {
+    success: Boolean!
+    category: Category
   }
 `;
