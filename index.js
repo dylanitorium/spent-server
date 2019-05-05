@@ -12,7 +12,8 @@ const server = new ApolloServer({
   resolvers,
   dataSources: () => ({
     budget: Budget,
-    plan: Plan
+    plan: Plan,
+    category: Category
   }),
   context: ({ req }) => {
     let token = null;

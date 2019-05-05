@@ -12,7 +12,7 @@ const categorySchema = createSchema(
 );
 
 categorySchema.virtual("budgets", {
-  ref: "Budgets",
+  ref: "Budget",
   localField: "_id",
   foreignField: "category"
 });

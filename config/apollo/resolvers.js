@@ -23,12 +23,14 @@ module.exports = {
       return dataSources.budget.find().where({ plan: plan.id });
     }),
     categories: withAuth(async ({ plan }, obj, args, { dataSources }, info) => {
-      const categories = dataSources.category.find().where({ plan: plan.id });
-      await dataSources.categories.populate(categories, "budgets");
+      const categories = await dataSources.category
+        .find()
+        .where({ plan: plan.id });
+      await dataSources.category.populate(categories, "budgets");
       return categories.map(category => ({
         id: category.id,
         name: category.name,
-        budgets: category.budgets.map(budget => ({
+        budgets: (category.budgets || []).map(budget => ({
           id: budget.id,
           name: budget.name
         }))

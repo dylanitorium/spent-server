@@ -26,15 +26,15 @@ module.exports = gql`
     updatedAt: DateTime
   }
 
+  type Category_Budget {
+    id: ID!
+    name: String!
+  }
+
   type Category {
     id: ID!
     name: String
     budgets: [Category_Budget]
-  }
-
-  type Category_Budget {
-    id: ID!
-    name: String!
   }
 
   type Plan {
