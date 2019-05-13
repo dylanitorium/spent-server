@@ -1,4 +1,5 @@
 const { AuthenticationError } = require("apollo-server");
+const getStream = require("get-stream");
 const { GraphQLDate, GraphQLDateTime } = require("graphql-iso-date");
 const moment = require("moment");
 const reportError = require("spent/utils/reportError");
@@ -36,6 +37,9 @@ module.exports = {
         }))
       }));
     }),
+    importSchemas: withAuth(({ plan }, obj, args, { dataSources }, info) => {
+      return dataSources.importSchema.find().where({ plan: plan.id });
+    }),
     plan: withAuth(async ({ plan }, obj, args, { dataSources }, info) => {
       await dataSources.plan.populate(plan, "budgets");
       return plan.reduce(moment());
@@ -43,9 +47,18 @@ module.exports = {
   },
   Mutation: {
     createBudget: withAuth(async ({ plan }, obj, args, { dataSources }) => {
+      const { category, createCategory, ...budgetArgs } = args;
+
       try {
+        if (createCategory) {
+          const categoryDoc = await dataSources.category.create({
+            name: category
+          });
+          budgetArgs["category"] = categoryDoc.id;
+        }
+
         const budget = await dataSources.budget.create({
-          ...args,
+          ...budgetArgs,
           plan: plan.id
         });
 
@@ -77,7 +90,39 @@ module.exports = {
           success: false
         };
       }
-    })
+    }),
+    createImportSchema: withAuth(
+      async ({ plan }, obj, args, { dataSources }) => {
+        try {
+          await dataSources.importSchema.create({ ...args, plan: plan.id });
+
+          return {
+            success: true
+          };
+        } catch (error) {
+          reportError(error);
+          return {
+            success: false
+          };
+        }
+      }
+    ),
+    importBudgets: withAuth(
+      async ({ plan }, obj, { file }, { dataSources }) => {
+        try {
+          const { createReadStream } = await file;
+          const contents = await getStream(createReadStream());
+          const json = JSON.parse(contents);
+
+          return dataSources.importers.budgets(json, plan);
+        } catch (e) {
+          reportError(e);
+          return {
+            success: false
+          };
+        }
+      }
+    )
   },
   Date: GraphQLDate,
   DateTime: GraphQLDateTime,

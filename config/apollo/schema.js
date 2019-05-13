@@ -21,7 +21,7 @@ module.exports = gql`
     frequencyValue: Int!
     frequencyUnit: BudgetFrequencyUnit!
     startDate: DateTime
-    income: Boolean
+    income: Boolean!
     createdAt: DateTime
     updatedAt: DateTime
   }
@@ -33,7 +33,7 @@ module.exports = gql`
 
   type Category {
     id: ID!
-    name: String
+    name: String!
     budgets: [Category_Budget]
   }
 
@@ -44,10 +44,22 @@ module.exports = gql`
     expectedIncomeToDate: Int
   }
 
+  type ImportSchema {
+    id: ID!
+    label: String
+    payee: String
+    reference: String
+    code: String
+    particulars: String
+    date: String
+    amount: String
+  }
+
   type Query {
     budgets: [Budget]!
-    categories: [Category]
+    categories: [Category]!
     plan: Plan!
+    importSchemas: [ImportSchema]!
   }
 
   type Mutation {
@@ -57,10 +69,29 @@ module.exports = gql`
       frequencyValue: Int!
       frequencyUnit: BudgetFrequencyUnit!
       startDate: Date!
-      category: ID
+      category: String
+      createCategory: Boolean
       income: Boolean!
     ): CreateBudgetResponse
     createCategory(name: String!): CreateCategoryResponse
+    importBudgets(file: Upload!): ImportBudgetsResponse
+    createImportSchema(
+      label: String
+      payee: String
+      reference: String
+      code: String
+      particulars: String
+      date: String
+      amount: String
+    ): CreateImportSchemaResponse
+  }
+
+  type ImportBudgetsResponse {
+    success: Boolean!
+  }
+
+  type CreateImportSchemaResponse {
+    success: Boolean!
   }
 
   type CreateBudgetResponse {

@@ -1,8 +1,8 @@
 const { createSchema, model } = require("spent/db/mongoose");
 const moment = require("moment");
+const Rule = require("spent/db/models/Rule");
 require("spent/db/models/Plan");
 require("spent/db/models/Category");
-// const GroupingRule = require("@db/models/GroupingRule");
 
 const FREQUENCY_UNITS = {
   SECONDS: "seconds",
@@ -87,8 +87,8 @@ const budgetSchema = createSchema(
     },
     plan: { type: String, ref: "Plan" },
     category: { type: String, ref: "Category" },
-    income: Boolean
-    // rules: [GroupingRule.schema]
+    income: Boolean,
+    rules: [Rule.schema]
   },
   {
     collection: "Budgets"
