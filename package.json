@@ -16,7 +16,7 @@
     "jwks-rsa": "^1.4.0",
     "lodash": "^4.17.11",
     "module-alias": "^2.2.0",
-    "moment": "^2.24.0",
+    "moment": "^2.29.4",
     "mongoose": "^5.4.16"
   },
   "devDependencies": {
