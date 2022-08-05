@@ -17,7 +17,7 @@
     "lodash": "^4.17.11",
     "module-alias": "^2.2.0",
     "moment": "^2.24.0",
-    "mongoose": "^5.4.16"
+    "mongoose": "^5.7.5"
   },
   "devDependencies": {
     "apollo": "^2.6.0",
